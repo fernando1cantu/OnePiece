@@ -1,12 +1,10 @@
 module Syntax where
 
--- The One Piece
+-- The One Piece 
 
 {-
 
 <prog> -> <player> [<stmt>]
-
--- <stmt> -> <var> = <expr>
 
 <stmt> -> teamup <crew>
         | attack <villain>
@@ -17,58 +15,90 @@ module Syntax where
         | if <condition> then [<stmt>] otherwise [<stmt>]
         | do <int> times [<stmt>]
 
-<condition> -> With <crew> | At <location>
+<condition> -> With <crew> 
+             | At <location> 
+             | LowHp
+
 <name> -> <string>
 <hp> -> <int>
-<totalcoints> -> <int>
+<totalcoins> -> <int>
+
 <player> -> <name> <hp> <location> (maybe <crew>) <totalcoins>
-<map> -> [(<location>, <int>)]
 
--- <expr> -> <int>
---         | <var>
---         | <expr> + <expr>
---         | <expr> - <expr>
---         | bounty <villain>
---         | treasure
-
--- <condition> -> <expr> < <expr>
---              | <expr> > <expr>
---              | <expr> == <expr>
-
--- <var> -> v<string>
-
-<crew> -> luffy | zoro | sanji | nami
-<villain> -> kaido | doflamingo | blackbeard | crocodile
+<crew> -> Luffy | Zoro | Sanji | Nami | Usopp
+<villain> -> Kaido | Doflamingo | Blackbeard | Crocodile
 
 <location> -> island | marineford | wano
 
--- <env> -> [(<var>, <value>)]
 <env> -> <player>
+
 -}
 
-type Program = [Stmt]
+-- Program 
+type Program = (Player, [Stmt])
 
-data Stmt = TeamUp Crew | Attack Villain | SailTo Location | EatDevilFruit
-    | LootTreasure | Print Player | If Condition [Stmt] [Stmt] | Do Int [Stmt] deriving (Show)
+-- Statements
+data Stmt
+    = TeamUp Crew
+    | Attack Villain
+    | SailTo Location
+    | EatDevilFruit
+    | LootTreasure
+    | Print Player
+    | If Condition [Stmt] [Stmt]
+    | Do Int [Stmt]
+    deriving (Show)
 
--- data Expr = Const Int | VarE Var | Add Expr Expr | Sub Expr Expr | Bounty Villain
---     | Treasure deriving (Show)
-
+-- Player
 type Name = String
 type Hp = Int
 type TCoins = Int
+
 data Player = Player Name Hp Location (Maybe Crew) TCoins
+    -- deriving (Show)
+instance Show Player where
+    show (Player nm hp loc Nothing tc) = "Player " ++ nm ++ "\n"
+        ++ "Hp: " ++ show hp ++ "\n"
+        ++ "Location: " ++ show loc ++ "\n"
+        ++ "Crew: None\n"
+        ++ "Total Coins: " ++ show tc ++ "\n"
+    show (Player nm hp loc (Just crew) tc) =
+        "Player " ++ nm ++ "\n" ++
+        "Hp: " ++ show hp ++ "\n" ++
+        "Location: " ++ show loc ++ "\n" ++
+        "Crew: " ++ show crew ++ "\n" ++
+        "Total Coins: " ++ show tc ++ "\n"
 
-data Condition = With Crew | At Location -- Less Expr Expr | Greater Expr Expr | Equal Expr Expr deriving (Show)
+-- Conditions 
+data Condition
+    = With Crew
+    | At Location
+    | LowHp
+    deriving (Show)
 
--- data Var = V String deriving (Show)
+-- Crew 
+data Crew
+    = Luffy
+    | Zoro
+    | Sanji
+    | Nami
+    | Usopp
+    deriving (Show)
 
-data Crew = Luffy | Zoro | Sanji | Nami | Usopp deriving (Show)
+-- Villains 
+data Villain
+    = Kaido
+    | Doflamingo
+    | Blackbeard
+    | Crocodile
+    deriving (Show)
 
-data Villain = Kaido | Doflamingo | Blackbeard | Crocodile deriving (Show)
+-- Locations
+data Location
+    = Island
+    | Marineford
+    | Wano
+    deriving (Show)
 
-data Location = Island | Marineford | Wano deriving (Show)
-
--- data Value = ValInt Int deriving (Show)
 
 type Env = Player
