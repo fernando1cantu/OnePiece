@@ -31,8 +31,8 @@ evaluateStmt EatDevilFruit (Player name hp location crew totalCoins) =
 evaluateStmt LootTreasure (Player name hp location crew totalCoins) =
     Player name hp location crew (totalCoins + 100)
 
-evaluateStmt (Print printedPlayer) env =
-    trace ("Printing player: " ++ show printedPlayer) env
+evaluateStmt (Print _) env =
+    trace ("\nPrinting player:\n" ++ show env ++ "\n") env
 
 evaluateStmt (If condition thenStmts elseStmts) env =
     if evaluateCondition condition env

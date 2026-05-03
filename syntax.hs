@@ -76,7 +76,7 @@ instance Show Stmt where
         "loot treasure"
 
     show (Print player) =
-        "print player\n" ++ indent (show player)
+        "print player" 
 
     show (If condition thenStmts elseStmts) =
         "if " ++ show condition ++ " then\n" ++

@@ -68,6 +68,11 @@ main = do
     print p
 
     putStrLn ""
-    putStrLn "Evaluating Example Program:"
+    putStrLn "Evaluating Example Program"
     putStrLn "---------------------------"
-    print (evaluate p)
+    let finalPlayer = evaluate p
+
+    putStrLn ""
+    putStrLn "Final Player:"
+    putStrLn "-------------"
+    print finalPlayer
