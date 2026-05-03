@@ -1,12 +1,14 @@
-module Examples where
+module Main where
 
 import Syntax
+import Semantics
 
 player1 :: Player
-player1 = Player "Fer" 100 Wano (Nothing) 500
+player1 =
+    Player "Fer" 100 Wano Nothing 500
 
 
--- cfg 
+-- cfg
 {-
 p:
 teamup Luffy
@@ -27,34 +29,45 @@ print player
 -}
 
 
-
--- abstract syntax 
+-- abstract syntax
 p :: Program
 p =
-    ( player1
-    , [ TeamUp Luffy
-      , Attack Kaido
-      , If (With Luffy)
-            [Attack Doflamingo]
-            [EatDevilFruit]
-      , If LowHp
-            [EatDevilFruit]
-            [Attack Kaido]
-      , Do 2 [LootTreasure]
-      , Print player1
-      ]
-    )
+    Program
+        player1
+        [ TeamUp Luffy
+        , Attack Kaido
+        , If (With Luffy)
+              [Attack Doflamingo]
+              [EatDevilFruit]
+        , If LowHp
+              [EatDevilFruit]
+              [Attack Kaido]
+        , Do 2 [LootTreasure]
+        , Print player1
+        ]
 
 
 p2 :: Program
 p2 =
-    ( player1
-    , [ TeamUp Zoro
-      , SailTo Marineford
-      , If (At Marineford)
-            [Attack Crocodile]
-            [Attack Kaido]
-      , Do 3 [LootTreasure]
-      , Print player1
-      ]
-    )
+    Program
+        player1
+        [ TeamUp Zoro
+        , SailTo Marineford
+        , If (At Marineford)
+              [Attack Crocodile]
+              [Attack Kaido]
+        , Do 3 [LootTreasure]
+        , Print player1
+        ]
+
+
+main :: IO ()
+main = do
+    putStrLn "Printing Example Program:"
+    putStrLn "-------------------------"
+    print p
+
+    putStrLn ""
+    putStrLn "Evaluating Example Program:"
+    putStrLn "---------------------------"
+    print (evaluate p)
